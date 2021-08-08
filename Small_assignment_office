@@ -1,0 +1,44 @@
+Answer 1) 
+--Finds the Number of district from the table "Sample_data"
+select count(distinct district) as count from sample_data;
+
+
+Answer 2) 
+--Gives a list of names of Employees who joined more than 5 years ago
+select
+trim(first_name) as trimmed_first_name,
+trim(last_name) as trimmed_last_name, 
+trim(middle_name) as trimmed_middle_name,
+(sysdate-account_open_date)/365 as joining_period 
+from CUSTOMER
+
+where ((sysdate-account_open_date)/365> 5);
+
+
+
+Answer 3) 
+--Adds Name and Date of Birth in an existing table "previous_table_name"
+INSERT INTO table_name (name, dob) 
+    select name, to_date(birth_date, 'DD-MM-YYYY') from previous_table_name;
+
+
+
+Answer 4)
+--Gives a list of all students admitted along with their full name who got more than 50 in exams and their corresponding courses maked by teachers who joined after 1st Jan 2019.
+select 
+student.first_name || ', ' || student.last_name as student_full_name,
+to_char(cast(student.admission_date as date), 'DD-MON-YYYY')  as admission_date,
+registration.marks as marks, 
+course.name as course_name
+from registration
+
+inner join student
+on registration.student_id = student.ID
+
+inner join course
+on registration.course_id = course.id
+
+inner join teacher
+on registration.teacher_id = teacher.id
+
+where registration.marks >50 and teacher.joining_date > to_date('01-Jan-2019', 'dd-mm-yyyy') order by student.first_name desc ;
